@@ -1,6 +1,7 @@
 import Sidebar from './Sidebar.js';
 import Editor from './Editor.js';
 import { request } from '../api.js';
+import { initRouter, push } from '../router.js';
 
 export default function App({ $target }) {
   const sidebar = new Sidebar({
@@ -14,10 +15,37 @@ export default function App({ $target }) {
         })
       }),
         sidebar.render();
+    },
+    showDocument: documentId => {
+      push(`/documents/${documentId}`);
     }
   });
 
-  new Editor({
-    $target
+  const editor = new Editor({
+    $target,
+    initialState: {
+      id: '',
+      title: '',
+      content: '',
+      documents: [],
+      createdAt: '',
+      updatedAt: ''
+    }
   });
+
+  this.route = () => {
+    const { pathname } = window.location;
+
+    if (pathname.indexOf('/documents/') === 0) {
+      const [, , documentId] = pathname.split('/');
+      editor.setState({
+        ...editor.state,
+        id: documentId
+      });
+    }
+  };
+
+  this.route();
+
+  initRouter(() => this.route());
 }

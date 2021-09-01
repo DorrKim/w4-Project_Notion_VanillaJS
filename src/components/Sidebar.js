@@ -19,7 +19,7 @@ const renderLists = documents => {
     `;
 };
 
-export default function Sidebar({ $target, addList }) {
+export default function Sidebar({ $target, addList, showDocument }) {
   const $sidebar = document.createElement('aside');
   $target.appendChild($sidebar);
 
@@ -31,12 +31,15 @@ export default function Sidebar({ $target, addList }) {
   this.render();
 
   $sidebar.addEventListener('click', e => {
-    const { clicked } = e.target;
+    const clicked = e.target;
+    const className = clicked.className;
     const $li = clicked.closest('li');
     const { id } = $li.dataset;
 
-    if (clicked.className === 'sidebar__add') {
+    if (className === 'sidebar__add') {
       addList(id);
+    } else if (className === 'sidebar__title') {
+      showDocument(id);
     }
   });
 }
