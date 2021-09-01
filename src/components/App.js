@@ -24,6 +24,15 @@ export default function App({ $target }) {
       list.querySelectorAll(`[data-depth="${depth + 1}"]`).forEach(subList => {
         subList.style.display = subList.style.display === '' ? 'none' : 'block';
       });
+    },
+    deleteList: async documentId => {
+      await request(`/documents/${documentId}`, {
+        method: 'DELETE'
+      }),
+        sidebar.render();
+      editor.render();
+      editor.addEvent();
+      push('/');
     }
   });
 

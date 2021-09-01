@@ -11,7 +11,8 @@ const renderLists = (documents, depth = 0) => {
             <button class="sidebar__toggle" type="button">▶</button>
             <span class="sidebar__title">${title}</span>
             <button class="sidebar__add" type="button">+</button>
-            ${documents.length ? renderLists(documents, depth) : ''}
+            <button class="sidebar__delete" type="button">x</button>
+            ${documents.length > 0 ? renderLists(documents, depth) : ''}
           </li>
           `
         )
@@ -20,7 +21,13 @@ const renderLists = (documents, depth = 0) => {
     `;
 };
 
-export default function Sidebar({ $target, addList, showDocument, foldList }) {
+export default function Sidebar({
+  $target,
+  addList,
+  showDocument,
+  foldList,
+  deleteList
+}) {
   const $sidebar = document.createElement('aside');
   $target.appendChild($sidebar);
 
@@ -44,6 +51,8 @@ export default function Sidebar({ $target, addList, showDocument, foldList }) {
       showDocument(id);
     } else if (className === 'sidebar__toggle') {
       foldList($li, depth);
+    } else if (className === 'sidebar__delete') {
+      deleteList(id);
     }
   });
 }
