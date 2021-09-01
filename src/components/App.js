@@ -18,6 +18,11 @@ export default function App({ $target }) {
     },
     showDocument: documentId => {
       push(`/documents/${documentId}`);
+    },
+    foldList: (list, depth) => {
+      list.querySelectorAll(`[data-depth="${depth + 1}"]`).forEach(subList => {
+        subList.style.display = subList.style.display === '' ? 'none' : 'block';
+      });
     }
   });
 
