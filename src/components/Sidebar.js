@@ -2,14 +2,14 @@ import { request } from '../api.js';
 
 const renderLists = documents => {
   return `
-    <ul>
+    <ul class="sidebar">
       ${documents
         .map(
           ({ id, title, documents }) => `
           <li data-id="${id}">
-            <button class="toggle" type="button">▶</button>
-            <span class="title">${title}</span>
-            <button class="add" type="button">+</button>
+            <button class="sidebar__toggle" type="button">▶</button>
+            <span class="sidebar__title">${title}</span>
+            <button class="sidebar__add" type="button">+</button>
             ${documents.length ? renderLists(documents) : ''}
           </li>
           `
