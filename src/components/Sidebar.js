@@ -35,7 +35,7 @@ export default function Sidebar({ $target, addList, showDocument, foldList }) {
     const clicked = e.target;
     const className = clicked.className;
     const $li = clicked.closest('li');
-    const id = parseInt($li.dataset);
+    const id = parseInt($li.dataset.id);
     const depth = parseInt($li.dataset.depth);
 
     if (className === 'sidebar__add') {
