@@ -1,4 +1,5 @@
 import Sidebar from './Sidebar.js';
+import Editor from './Editor.js';
 import { request } from '../api.js';
 
 export default function App({ $target }) {
@@ -14,5 +15,9 @@ export default function App({ $target }) {
       }),
         sidebar.render();
     }
+  });
+
+  new Editor({
+    $target
   });
 }
