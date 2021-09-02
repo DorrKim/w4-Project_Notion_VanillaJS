@@ -22,7 +22,8 @@ export default function App({ $target }) {
     },
     foldList: (list, depth) => {
       list.querySelectorAll(`[data-depth="${depth + 1}"]`).forEach(subList => {
-        subList.style.display = subList.style.display === '' ? 'none' : 'block';
+        subList.style.display =
+          subList.style.display === 'block' ? 'none' : 'block';
       });
     },
     deleteList: async documentId => {

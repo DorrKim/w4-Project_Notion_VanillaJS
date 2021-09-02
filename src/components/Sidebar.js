@@ -7,7 +7,7 @@ const renderLists = (documents, depth = 0) => {
       ${documents
         .map(
           ({ id, title, documents }) => `
-          <li data-id="${id}" data-depth="${depth}">
+          <li data-id="${id}" data-depth="${depth}" style="block">
             <button class="sidebar__toggle" type="button">▶</button>
             <span class="sidebar__title">${title}</span>
             <button class="sidebar__add" type="button">+</button>
@@ -42,17 +42,19 @@ export default function Sidebar({
     const clicked = e.target;
     const className = clicked.className;
     const $li = clicked.closest('li');
-    const id = parseInt($li.dataset.id);
-    const depth = parseInt($li.dataset.depth);
+    if ($li) {
+      const id = parseInt($li.dataset.id);
+      const depth = parseInt($li.dataset.depth);
 
-    if (className === 'sidebar__add') {
-      addList(id);
-    } else if (className === 'sidebar__title') {
-      showDocument(id);
-    } else if (className === 'sidebar__toggle') {
-      foldList($li, depth);
-    } else if (className === 'sidebar__delete') {
-      deleteList(id);
+      if (className === 'sidebar__add') {
+        addList(id);
+      } else if (className === 'sidebar__title') {
+        showDocument(id);
+      } else if (className === 'sidebar__toggle') {
+        foldList($li, depth);
+      } else if (className === 'sidebar__delete') {
+        deleteList(id);
+      }
     }
   });
 }
