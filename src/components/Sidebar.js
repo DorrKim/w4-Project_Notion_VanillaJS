@@ -11,7 +11,7 @@ const renderLists = (documents, depth = 0) => {
             <button class="sidebar__toggle" type="button">▶</button>
             <span class="sidebar__title">${title}</span>
             <button class="sidebar__add" type="button">+</button>
-            <button class="sidebar__delete" type="button">x</button>
+            <button class="sidebar__delete" type="button">-</button>
             ${documents.length > 0 ? renderLists(documents, depth) : ''}
           </li>
           `

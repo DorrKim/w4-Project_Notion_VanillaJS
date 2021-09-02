@@ -1,3 +1,11 @@
+aside {
+  position: fixed;
+  width: 240px;
+  height: 100vh;
+  padding: 1%;
+  background-color: #f7f6f3;
+}
+
 ul {
   padding: 0;
 }
@@ -8,11 +16,17 @@ li {
 }
 
 .sidebar__toggle,
+.sidebar__title,
 .sidebar__add,
 .sidebar__delete {
-  border: 0;
-  outline: 0;
-  color: gray;
+  width: 25px;
+  height: 25px;
+  margin-bottom: 10%;
+  padding: 0;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
   background-color: transparent;
+  color: gray;
   cursor: pointer;
 }
