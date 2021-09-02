@@ -16,7 +16,9 @@ export default function Editor({ $target, initialState, onEditSave }) {
     const { id, title, content } = this.state;
 
     $editor.innerHTML = `
+    <label for="editor__title" style="display: none">제목</label>
     <input
+      id="editor__title"
       class="editor__title"
       type="text"
       name="title"
