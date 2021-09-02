@@ -58,10 +58,13 @@ export default function App({ $target }) {
       const localSaveKey = `temp-document-${id}`;
 
       timer = setTimeout(async () => {
-        setItem(localSaveKey, {
-          title,
-          content,
-          updatedAt: new Date()
+        setItem({
+          key: localSaveKey,
+          value: {
+            title,
+            content,
+            updatedAt: new Date()
+          }
         });
 
         if (id === 'new') {
@@ -82,7 +85,7 @@ export default function App({ $target }) {
           });
         }
 
-        removeItem(localSaveKey);
+        removeItem({ key: localSaveKey });
         sidebar.render();
       }, 2000);
     }
