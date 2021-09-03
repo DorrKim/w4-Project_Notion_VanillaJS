@@ -6,8 +6,10 @@ const renderLists = (documents, depth = 0) => {
     <ul class="sidebar">
       ${documents
         .map(
-          ({ id, title, documents }) => `
-          <li data-id="${id}" data-depth="${depth}" style="block">
+          ({ id, title, isToggled, documents }) => `
+          <li data-id="${id}" data-depth="${depth}" style="${
+            isToggled ? 'none' : 'block'
+          }">
             <button class="sidebar__toggle" type="button">▶</button>
             <span class="sidebar__title">${title}</span>
             <button class="sidebar__add" type="button">+</button>
@@ -23,6 +25,7 @@ const renderLists = (documents, depth = 0) => {
 
 export default function Sidebar({
   $target,
+  intialState,
   addList,
   showDocument,
   foldList,
@@ -31,9 +34,17 @@ export default function Sidebar({
   const $sidebar = document.createElement('aside');
   $target.appendChild($sidebar);
 
-  this.render = async () => {
-    const documents = await request('/documents/');
-    $sidebar.innerHTML = renderLists(documents);
+  this.state = intialState;
+
+  this.setState = nextState => {
+    this.state = nextState;
+    this.render();
+  };
+
+  this.render = () => {
+    if (this.state) {
+      $sidebar.innerHTML = renderLists(this.state);
+    }
   };
 
   this.render();
@@ -51,6 +62,7 @@ export default function Sidebar({
       } else if (className === 'sidebar__title') {
         showDocument(id);
       } else if (className === 'sidebar__toggle') {
+        console.log(this.state);
         foldList($li, depth);
       } else if (className === 'sidebar__delete') {
         deleteList(id);

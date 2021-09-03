@@ -4,9 +4,36 @@ import { request } from '../api.js';
 import { initRouter, push } from '../router.js';
 import { removeItem, setItem } from '../storage.js';
 
+const addToggleAttribute = documents => {
+  return documents.map(obj => {
+    obj.isToggled = false;
+    if (obj.documents.length === 0) {
+      return obj;
+    }
+    addToggleAttribute(obj.documents);
+    return obj;
+  });
+};
+
 export default function App({ $target }) {
+  this.state = {
+    rootDocuments: []
+  };
+
+  this.setState = async () => {
+    const documents = await request('/documents/');
+    const modifiedDocuments = addToggleAttribute(documents);
+
+    this.state.rootDocuments = modifiedDocuments;
+    sidebar.setState(this.state.rootDocuments);
+  };
+
+  this.setState();
+
+  /* 컴포넌트 */
   const sidebar = new Sidebar({
     $target,
+    intialState: [],
     addList: async id => {
       await request('/documents', {
         method: 'POST',
@@ -15,7 +42,7 @@ export default function App({ $target }) {
           parent: id
         })
       }),
-        sidebar.render();
+        this.setState();
     },
     showDocument: documentId => {
       push(`/documents/${documentId}`);
@@ -91,12 +118,14 @@ export default function App({ $target }) {
     }
   });
 
+  /* 라우트 */
   this.route = () => {
     const { pathname } = window.location;
 
     if (pathname.indexOf('/documents/') === 0) {
       const [, , documentId] = pathname.split('/');
 
+      sidebar.setState();
       editor.setState({
         ...editor.state,
         id: documentId
