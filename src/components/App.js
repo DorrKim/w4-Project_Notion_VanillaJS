@@ -84,17 +84,25 @@ export default function App({ $target }) {
     initialState: {
       id: '',
       title: '',
-      content: '',
-      documents: [],
-      createdAt: '',
-      updatedAt: ''
+      content: ''
     },
-    onEditSave: document => {
+    onEditSave: async ({ id, title, content }) => {
+      const currentState = await request(`/documents/${id}`, {
+        method: 'GET'
+      });
+
+      console.log(title);
+
+      if (!title) {
+        title = currentState.title;
+      } else if (!content) {
+        content = currentState.content;
+      }
+
       if (timer !== null) {
         clearTimeout(timer);
       }
 
-      const { id, title, content } = document;
       const localSaveKey = `temp-document-${id}`;
 
       timer = setTimeout(async () => {
@@ -127,12 +135,8 @@ export default function App({ $target }) {
 
         removeItem({ key: localSaveKey });
 
-        const nextState = await request('/documents', {
-          method: 'GET'
-        });
-
-        sidebar.setState(nextState);
-      }, 2000);
+        this.setState();
+      }, 500);
     }
   });
 
