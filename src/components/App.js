@@ -70,8 +70,7 @@ export default function App({ $target }) {
       });
 
       sidebar.setState(nextState);
-      editor.render();
-      editor.addEvent();
+      editor.setState();
       push('/');
     }
   });
@@ -125,7 +124,12 @@ export default function App({ $target }) {
         }
 
         removeItem({ key: localSaveKey });
-        sidebar.render();
+
+        const nextState = await request('/documents', {
+          method: 'GET'
+        });
+
+        sidebar.setState(nextState);
       }, 2000);
     }
   });
@@ -136,7 +140,6 @@ export default function App({ $target }) {
     if (pathname.indexOf('/documents/') === 0) {
       const [, , documentId] = pathname.split('/');
 
-      sidebar.setState();
       editor.setState({
         ...editor.state,
         id: documentId
