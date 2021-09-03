@@ -18,3 +18,17 @@
     <script src="/src/main.js" type="module"></script>
   </body>
 </html>
+
+`
+<ul class="sidebar">
+  <li data-id="${id}">
+    <button class="sidebar__toggle" type="button" style="${display}">▶</button>
+    <span class="sidebar__title" style="${display}">${title}</span>
+    <button class="sidebar__add" type="button" style="${display}">+</button>
+    <button class="sidebar__delete" type="button" style="${display}">-</button>
+  </li>
+
+  ${ documents.length > 0 ? renderLists( documents, `display: ${isToggled ?
+  'none' : 'inline'};` ) : '' }
+</ul>
+`

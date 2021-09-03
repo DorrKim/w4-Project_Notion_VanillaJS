@@ -7,11 +7,8 @@ export default function Editor({ $target, initialState, onEditSave }) {
   this.state = initialState;
 
   this.setState = async nextState => {
-    if (nextState) {
-      this.state = await request(`/documents/${nextState.id}`);
-    }
+    this.state = await request(`/documents/${nextState.id}`);
     this.render();
-    this.addEvent();
   };
 
   this.render = () => {

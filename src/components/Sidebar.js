@@ -1,4 +1,4 @@
-const renderLists = (documents, styleInput = '') => {
+const renderLists = (documents, display = 'inline') => {
   return `
     
       ${documents
@@ -6,20 +6,20 @@ const renderLists = (documents, styleInput = '') => {
           ({ id, title, isToggled, documents }) => `
           <ul class="sidebar">
             <li data-id="${id}">
-              <button class="sidebar__toggle" type="button" style="${styleInput}">▶</button>
-              <span class="sidebar__title" style="${styleInput}">${title}</span>
-              <button class="sidebar__add" type="button" style="${styleInput}">+</button>
-              <button class="sidebar__delete" type="button" style="${styleInput}">-</button>
+              <button class="sidebar__toggle" type="button" style="${display}">▶</button>
+              <span class="sidebar__title" style="${display}">${title}</span>
+              <button class="sidebar__add" type="button" style="${display}">+</button>
+              <button class="sidebar__delete" type="button" style="${display}">-</button>
             </li>
           
-          ${
-            documents.length > 0
-              ? renderLists(
-                  documents,
-                  `display: ${isToggled ? 'none' : 'inline'};`
-                )
-              : ''
-          }
+            ${
+              documents.length > 0
+                ? renderLists(
+                    documents,
+                    `display: ${isToggled ? 'none' : 'inline'};`
+                  )
+                : ''
+            }
           </ul>
           `
         )
@@ -31,9 +31,9 @@ const renderLists = (documents, styleInput = '') => {
 export default function Sidebar({
   $target,
   intialState,
-  addList,
+  createList,
   showDocument,
-  foldList,
+  toggleList,
   deleteList
 }) {
   const $sidebar = document.createElement('aside');
@@ -47,28 +47,26 @@ export default function Sidebar({
   };
 
   this.render = () => {
-    if (this.state) {
-      $sidebar.innerHTML = renderLists(this.state);
-    }
+    $sidebar.innerHTML = renderLists(this.state);
   };
 
   this.render();
 
   $sidebar.addEventListener('click', e => {
-    const clicked = e.target;
-    const className = clicked.className;
-    const $li = clicked.closest('li');
+    const target = e.target;
+    const className = target.className;
+    const $li = target.closest('li');
     if ($li) {
-      const id = parseInt($li.dataset.id);
+      const documentId = parseInt($li.dataset.id);
 
       if (className === 'sidebar__add') {
-        addList(id);
+        createList(documentId);
       } else if (className === 'sidebar__title') {
-        showDocument(id);
+        showDocument(documentId);
       } else if (className === 'sidebar__toggle') {
-        foldList({ rootDocuments: this.state, documentId: id });
+        toggleList({ rootDocuments: this.state, documentId });
       } else if (className === 'sidebar__delete') {
-        deleteList(id);
+        deleteList(documentId);
       }
     }
   });
