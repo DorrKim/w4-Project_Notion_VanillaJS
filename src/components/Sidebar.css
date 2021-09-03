@@ -2,16 +2,18 @@ aside {
   position: fixed;
   width: 240px;
   height: 100vh;
-  padding: 1%;
+  padding: 15px 5px;
   background-color: #f7f6f3;
 }
 
 ul {
-  padding: 0;
+  margin: 0;
+  padding-left: 3%;
 }
 
 li {
-  padding-left: 10px;
+  margin-bottom: 10%;
+  padding-left: 3%;
   list-style: none;
 }
 
@@ -21,7 +23,6 @@ li {
 .sidebar__delete {
   width: 25px;
   height: 25px;
-  margin-bottom: 10%;
   padding: 0;
   border: none;
   font-size: 18px;

@@ -1,25 +1,30 @@
-import { request } from '../api.js';
-
-const renderLists = (documents, depth = 0) => {
-  depth++;
+const renderLists = (documents, styleInput = '') => {
   return `
-    <ul class="sidebar">
+    
       ${documents
         .map(
           ({ id, title, isToggled, documents }) => `
-          <li data-id="${id}" data-depth="${depth}" style="${
-            isToggled ? 'none' : 'block'
-          }">
-            <button class="sidebar__toggle" type="button">▶</button>
-            <span class="sidebar__title">${title}</span>
-            <button class="sidebar__add" type="button">+</button>
-            <button class="sidebar__delete" type="button">-</button>
-            ${documents.length > 0 ? renderLists(documents, depth) : ''}
-          </li>
+          <ul class="sidebar">
+            <li data-id="${id}">
+              <button class="sidebar__toggle" type="button" style="${styleInput}">▶</button>
+              <span class="sidebar__title" style="${styleInput}">${title}</span>
+              <button class="sidebar__add" type="button" style="${styleInput}">+</button>
+              <button class="sidebar__delete" type="button" style="${styleInput}">-</button>
+            </li>
+          
+          ${
+            documents.length > 0
+              ? renderLists(
+                  documents,
+                  `display: ${isToggled ? 'none' : 'inline'};`
+                )
+              : ''
+          }
+          </ul>
           `
         )
         .join('')}
-    </ul>
+    
     `;
 };
 
@@ -55,15 +60,13 @@ export default function Sidebar({
     const $li = clicked.closest('li');
     if ($li) {
       const id = parseInt($li.dataset.id);
-      const depth = parseInt($li.dataset.depth);
 
       if (className === 'sidebar__add') {
         addList(id);
       } else if (className === 'sidebar__title') {
         showDocument(id);
       } else if (className === 'sidebar__toggle') {
-        console.log(this.state);
-        foldList($li, depth);
+        foldList({ rootDocuments: this.state, documentId: id });
       } else if (className === 'sidebar__delete') {
         deleteList(id);
       }

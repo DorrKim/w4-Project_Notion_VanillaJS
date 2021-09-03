@@ -29,8 +29,6 @@ export default function App({ $target }) {
   };
 
   this.setState();
-
-  /* 컴포넌트 */
   const sidebar = new Sidebar({
     $target,
     intialState: [],
@@ -47,17 +45,31 @@ export default function App({ $target }) {
     showDocument: documentId => {
       push(`/documents/${documentId}`);
     },
-    foldList: (list, depth) => {
-      list.querySelectorAll(`[data-depth="${depth + 1}"]`).forEach(subList => {
-        subList.style.display =
-          subList.style.display === 'list-item' ? 'none' : 'list-item';
-      });
+    foldList: ({ rootDocuments, documentId }) => {
+      console.log(rootDocuments);
+      const toggleDocument = (rootDocuments, documentId) => {
+        return rootDocuments.map(obj => {
+          if (obj.id === documentId) {
+            obj.isToggled = !obj.isToggled;
+            return obj;
+          }
+          toggleDocument(obj.documents, documentId);
+          return obj;
+        });
+      };
+      const nextState = toggleDocument(rootDocuments, documentId);
+      sidebar.setState(nextState);
     },
     deleteList: async documentId => {
       await request(`/documents/${documentId}`, {
         method: 'DELETE'
-      }),
-        sidebar.render();
+      });
+
+      const nextState = await request('/documents', {
+        method: 'GET'
+      });
+
+      sidebar.setState(nextState);
       editor.render();
       editor.addEvent();
       push('/');
@@ -118,7 +130,6 @@ export default function App({ $target }) {
     }
   });
 
-  /* 라우트 */
   this.route = () => {
     const { pathname } = window.location;
 
